@@ -42,16 +42,6 @@ puts token_xml
   end
 
   ##
-  # Removes unneeded XML tags that come along with Rest responses.
-  # 
-  # @param [String] string The string to remove the XML from.
-  # @return [String] The string without the XML tags.
-  def strip_response_xml_from string
-    doc = REXML::Document.new(string)
-    new_string = doc.root.elements['//string'].text
-  end
-
-  ##
   # Logs out of Fisheye/Crucible.
   #
   # @return [Boolean] Returns true if logout was successful.
