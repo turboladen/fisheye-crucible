@@ -6,7 +6,6 @@ require 'rexml/document'
 class FisheyeCrucible::Client
 
   def initialize(servers)
-    format :xml
     @servers = servers
     @fisheye_rest = RestClient::Resource.new(@servers[:fisheye], :accept => :json )
     @token = nil
