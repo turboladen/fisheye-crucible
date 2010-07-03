@@ -89,9 +89,10 @@ puts token_xml
   # 
   # @return [String] The version of Fisheye.
   def fisheye_version
-    version = @fisheye_rest['api/rest/fisheyeVersion'].get
-    # TODO: Fix to use REXML here!
-    return strip_response_xml_from version
+    version_xml = @fisheye_rest['api/rest/fisheyeVersion'].get
+    
+    doc = REXML::Document.new(version_xml)
+    version = doc.root.elements['//string'].text
   end
   alias :fisheyeVersion :fisheye_version
 
@@ -100,9 +101,10 @@ puts token_xml
   # 
   # @return [String] The version of Crucible
   def crucible_version
-    version = @fisheye_rest['api/rest/crucibleVersion'].get
-    # TODO: Fix to use REXML here!
-    return strip_response_xml_from version
+    version_xml = @fisheye_rest['api/rest/crucibleVersion'].get
+
+    doc = REXML::Document.new(version_xml)
+    version = doc.root.elements['//string'].text
   end
   alias :crucibleVersion :crucible_version
 
@@ -111,10 +113,11 @@ puts token_xml
   # 
   # @return [Array] The list of repositories.
   def repositories
-    repos_xml = @fisheye_rest['api/rest/repositories'].get
-puts repos_xml
-    #repos_xml = @fisheye_rest['api/rest/repositories'].post :auth => @token
     repositories = []
+
+    repos_xml = @fisheye_rest['api/rest/repositories'].get
+    #repos_xml = @fisheye_rest['api/rest/repositories'].post :auth => @token
+
     doc = REXML::Document.new(repos_xml)
     doc.root.each_element do |element|
       repositories << element.text
