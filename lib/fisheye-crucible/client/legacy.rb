@@ -27,7 +27,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
       token_xml = @fisheye_rest['api/rest/login'].post :username => username, 
         :password => password
 
-puts token_xml
       doc = REXML::Document.new(token_xml)
       if doc.elements['error']
         raise SecurityError, "Login failed.  #{doc.elements['error'].text}"
