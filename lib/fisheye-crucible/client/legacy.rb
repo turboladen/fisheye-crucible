@@ -15,6 +15,11 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     super(server)
   end
 
+  def response_type xml_response
+    doc = REXML::Document.new(xml_response)
+    doc.root.name
+  end
+
   ##
   # Logs in with provided credentials and returns a token that can be used for
   #   all other calls.
@@ -150,6 +155,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   #   resides.
   # @param [Fixnum] revision The revision of the file/directory to get the info
   #   about.
+  # @return [Hash] The list of details about the file revision.
   def revision(repository, path, revision)
     revision_xml = @fisheye_rest['api/rest/revision'].post :auth => @token,
       :rep => repository,
@@ -167,4 +173,39 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     details
   end
   alias :getRevision :revision
+
+  ##
+  # Gets tags associated with a file/directory revision.
+  # 
+  # @param [String] repository The repository in which the file resides.
+  # @param [String] path The path, relative to the repository, in which the file
+  #   resides.
+  # @param [Fixnum] revision The revision of the file/directory to get the tags
+  #   for.
+  # @return [Hash] The list of tags for the file revision.
+  def tags(repository, path, revision)
+    begin
+      tags_xml = @fisheye_rest['api/rest/tags'].post :auth => @token,
+        :rep => repository,
+        :path => path,
+        :rev => revision.to_s
+
+      debug tags_xml
+
+      doc = REXML::Document.new(tags_xml)
+    
+      if doc.root.name.eql? 'error'
+        raise doc.root.text
+      elsif doc.root.name.eql? 'response' and doc.root.has_elements?
+        # TODO: Not sure if this works since I can't find any files
+        #   with tags.
+        return doc.root.elements['//tags'].text
+      elsif doc.root.name.eql? 'response' and !doc.root.has_elements?
+        return ""
+      end
+    rescue => e
+      puts e.inspect
+    end
+  end
+  alias :listTagsForRevision :tags
 end
