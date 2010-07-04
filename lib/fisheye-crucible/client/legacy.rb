@@ -140,4 +140,31 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     path_names
   end
   alias :listPaths :list_paths_from
+
+  ##
+  # Gets details about a specific file/directory revision from the given
+  #   repository.
+  # 
+  # @param [String] repository The repository in which the file resides.
+  # @param [String] path The path, relative to the repository, in which the file
+  #   resides.
+  # @param [Fixnum] revision The revision of the file/directory to get the info
+  #   about.
+  def revision(repository, path, revision)
+    revision_xml = @fisheye_rest['api/rest/revision'].post :auth => @token,
+      :rep => repository,
+      :path => path,
+      :rev => revision.to_s
+
+    details = {}
+    doc = REXML::Document.new(revision_xml)
+    if doc.elements['response']
+      doc.root.elements['//revision'].attributes.each do |a|
+        details[a.first.to_sym] = a[1]
+      end
+      details[:log] = doc.root.elements['//log'].text
+    end
+    details
+  end
+  alias :getRevision :revision
 end
