@@ -1,7 +1,7 @@
 $:.unshift(File.dirname(__FILE__)) unless
   $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
-require 'fisheye-crucible/fc_exception'
+require 'fisheye_crucible_exception'
 
 module FisheyeCrucible
   VERSION = '0.0.1'
