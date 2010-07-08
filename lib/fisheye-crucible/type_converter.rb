@@ -7,9 +7,7 @@ class String
     doc = REXML::Document.new self
 
     type = doc.root.name
-    puts type
     message = doc.root.text
-    puts message
 
     responses = []
     response_type = ''
@@ -20,16 +18,13 @@ class String
       doc.root.each_element do |element|
         # The data type
         response_type = element.name
-        puts "response type: #{response_type}"
 
         # Text for the next element
         responses << element.text
-        puts "response text: #{element.text}"
       end
     else
     end
 
-    puts "responses length = #{responses.length}"
     # If we have 0 or 1 actual strings, return the string or ""
     if response_type.eql? 'string' and responses.length <= 1
       return string_to_string(doc)
