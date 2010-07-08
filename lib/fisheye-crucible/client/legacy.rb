@@ -207,6 +207,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
       return response
     end
   end
+  alias :pathHistory :path_history
 rescue FisheyeCrucibleError => e
   puts e.message
 end
