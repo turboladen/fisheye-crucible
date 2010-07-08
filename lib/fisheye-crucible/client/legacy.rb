@@ -166,14 +166,14 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   #   for.
   # @return [Hash] The list of tags for the file revision.
   def tags(repository, path, revision)
-    begin
-      tags_xml = @fisheye_rest['api/rest/tags'].post :auth => @token,
-        :rep => repository,
-        :path => path,
-        :rev => revision.to_s
+    tags_xml = @fisheye_rest['api/rest/tags'].post :auth => @token,
+      :rep => repository,
+      :path => path,
+      :rev => revision.to_s
 
-      debug tags_xml
-
+    #debug tags_xml
+    return tags_xml.to_ruby
+=begin
       doc = REXML::Document.new(tags_xml)
     
       if doc.root.name.eql? 'error'
@@ -185,34 +185,28 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
       elsif doc.root.name.eql? 'response' and !doc.root.has_elements?
         return ""
       end
-    rescue => e
-      puts e.inspect
-    end
+=end
   end
   alias :listTagsForRevision :tags
 
+  ##
+  # Gets the history for a file/directory, which is a list of revisions and
+  #   their associated info.
+  # 
+  # @return [Array<Hash>] The list of revisions.
   def path_history(repository, path)
-    begin
-      history_xml = @fisheye_rest['api/rest/pathHistory'].post :auth => @token,
-        :rep => repository,
-        :path => path
+    history_xml = @fisheye_rest['api/rest/pathHistory'].post :auth => @token,
+      :rep => repository,
+      :path => path
 
-      debug history_xml
-    debug history_xml.to_ruby
-    return
+    response = history_xml.to_ruby
 
-      doc = REXML::Document.new(history_xml)
-      
-      if doc.root.name.eql? 'error'
-        raise FisheyeCrucibleError, doc.root.text
-      elsif doc.root.name.eql? 'response'
-        debug doc.root.elements['history/revisions']
-      end
-    rescue => e
-      puts e.inspect
+    if response.class == FisheyeCrucibleError
+      raise response
+    else
+      return response
     end
   end
 rescue FisheyeCrucibleError => e
-  puts "WE'RE HEEEERE"
   puts e.message
 end
