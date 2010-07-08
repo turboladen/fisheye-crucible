@@ -1,7 +1,6 @@
 require 'rexml/document'
 require 'fisheye-crucible'
 
-#class FisheyeCrucible::TypeConverter < String
 class String
   def to_ruby
     doc = REXML::Document.new self
