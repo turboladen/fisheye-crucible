@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'fisheye-crucible/client'
+require 'fisheye-crucible/type_converter'
 require 'rexml/document'
 
 ##
@@ -15,11 +16,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     super(server)
   end
 
-  def response_type xml_response
-    doc = REXML::Document.new(xml_response)
-    doc.root.name
-  end
-
   ##
   # Logs in with provided credentials and returns a token that can be used for
   #   all other calls.
@@ -28,19 +24,15 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @param [String] password The password of the user to login with.
   # @return [String] The token to use for other calls.
   def login(username=nil, password=nil)
-    begin
-      token_xml = @fisheye_rest['api/rest/login'].post :username => username, 
-        :password => password
+    token_xml = @fisheye_rest['api/rest/login'].post :username => username, 
+      :password => password
 
-      doc = REXML::Document.new(token_xml)
-      if doc.elements['error']
-        raise SecurityError, "Login failed.  #{doc.elements['error'].text}"
-      elsif doc.elements['response']
-        @token = doc.root.elements['//string'].text
-      end
+    response = token_xml.to_ruby
+    if response.class == FisheyeCrucibleError
+      raise response
+    elsif response.class == String
+      @token = response
       return @token
-    rescue => e
-      puts e.inspect
     end
     return nil
   end
@@ -50,31 +42,16 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   #
   # @return [Boolean] Returns true if logout was successful.
   def logout
-    begin
-      result_xml = @fisheye_rest['api/rest/logout'].post :auth => @token
+    result_xml = @fisheye_rest['api/rest/logout'].post :auth => @token
+    debug(result_xml)
 
-      not_valid = "Given auth token not valid"
-      if result_xml.include? not_valid
-        raise SecurityError, not_valid
-      end
-    rescue SecurityError => e
-      puts e
-      return false
-    rescue RuntimeError => e
-      puts e.inspect
-      return nil
-    end
+    response = result_xml.to_ruby
 
-    doc = REXML::Document.new(result_xml)
-    result_string = doc.root.elements['//boolean'].text
-
-    if result_string.eql? 'true'
-      return true
-    elsif result_string.eql? 'false'
-      # Not sure if we could ever get here, but just in case
-      return false
+    if response.class == FisheyeCrucibleError
+      raise response
     else
-      return nil
+      @token = '' if response == true
+      return response
     end
   end
 
@@ -82,23 +59,33 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # Gets the version of Fisheye.
   # 
   # @return [String] The version of Fisheye.
+  # @alias fisheyeVersion
   def fisheye_version
     version_xml = @fisheye_rest['api/rest/fisheyeVersion'].get
-    
-    doc = REXML::Document.new(version_xml)
-    version = doc.root.elements['//string'].text
+    response = version_xml.to_ruby
+
+    if response.class == FisheyeCrucibleError
+      raise response
+    else
+      return response
+    end
   end
   alias :fisheyeVersion :fisheye_version
 
   ##
   # Gets the version of Crucible.
   # 
-  # @return [String] The version of Crucible
+  # @return [String] The version of Crucible.
   def crucible_version
     version_xml = @fisheye_rest['api/rest/crucibleVersion'].get
 
-    doc = REXML::Document.new(version_xml)
-    version = doc.root.elements['//string'].text
+    response = version_xml.to_ruby
+
+    if response.class == FisheyeCrucibleError
+      raise response
+    else
+      return response
+    end
   end
   alias :crucibleVersion :crucible_version
 
@@ -109,14 +96,14 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   def repositories
     repositories = []
 
-    repos_xml = @fisheye_rest['api/rest/repositories'].get
-    #repos_xml = @fisheye_rest['api/rest/repositories'].post :auth => @token
+    repos_xml = @fisheye_rest['api/rest/repositories'].post :auth => @token
+    response = repos_xml.to_ruby
 
-    doc = REXML::Document.new(repos_xml)
-    doc.root.each_element do |element|
-      repositories << element.text
+    if response.class == FisheyeCrucibleError
+      raise response
+    else
+      return response
     end
-    return repositories
   end
   alias :listRepositories :repositories
 
@@ -133,16 +120,13 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
       :rep => repository,
       :path => path
 
-    path_names = {}
-    doc = REXML::Document.new(paths_xml)
-    doc.root.elements.each("pathinfo") do |element|
-      path_name = element.attributes["name"]
-      path_names[path_name] = { :is_file => element.attributes["isFile"],
-        :is_dir => element.attributes["isDir"],
-        :is_head_deleted => element.attributes["isHeadDeleted"]
-      }
+    response = paths_xml.to_ruby
+
+    if response.class == FisheyeCrucibleError
+      raise response
+    else
+      return response
     end
-    path_names
   end
   alias :listPaths :list_paths_from
 
@@ -162,15 +146,13 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
       :path => path,
       :rev => revision.to_s
 
-    details = {}
-    doc = REXML::Document.new(revision_xml)
-    if doc.elements['response']
-      doc.root.elements['//revision'].attributes.each do |a|
-        details[a.first.to_sym] = a[1]
-      end
-      details[:log] = doc.root.elements['//log'].text
+    response = revision_xml.to_ruby
+
+    if response.class == FisheyeCrucibleError
+      raise response
+    else
+      return response
     end
-    details
   end
   alias :getRevision :revision
 
@@ -208,4 +190,29 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     end
   end
   alias :listTagsForRevision :tags
+
+  def path_history(repository, path)
+    begin
+      history_xml = @fisheye_rest['api/rest/pathHistory'].post :auth => @token,
+        :rep => repository,
+        :path => path
+
+      debug history_xml
+    debug history_xml.to_ruby
+    return
+
+      doc = REXML::Document.new(history_xml)
+      
+      if doc.root.name.eql? 'error'
+        raise FisheyeCrucibleError, doc.root.text
+      elsif doc.root.name.eql? 'response'
+        debug doc.root.elements['history/revisions']
+      end
+    rescue => e
+      puts e.inspect
+    end
+  end
+rescue FisheyeCrucibleError => e
+  puts "WE'RE HEEEERE"
+  puts e.message
 end
