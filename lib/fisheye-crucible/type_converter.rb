@@ -42,6 +42,8 @@ class String
       return pathinfo_to_hash(doc)
     elsif response_type.eql? 'revision'
       return revision_to_hash(doc)
+    elsif response_type.eql? 'history'
+      return history_to_array(doc)
     else
       message = "Response type unknown: '#{response_type}'"
       return FisheyeCrucibleError.new(message)
@@ -141,5 +143,23 @@ class String
     details[:log] = xml_doc.root.elements['//log'].text
 
     details
+  end
+
+  ##
+  # Takes Fisheye/Crucible's <history> return type and turns it in to an
+  #   Array of revisions, which are Hashes.
+  # 
+  # @param [REXML::Document] xml_doc The XML document to convert.
+  # @return [Array] The Array of revision Hashes.
+  def history_to_array(xml_doc)
+    revisions = []
+    
+    revisions_xml = REXML::XPath.match( xml_doc, "//revisions/revision" ) 
+    revisions_xml.each do |revision_xml|
+      revision = REXML::Document.new(revision_xml.to_s)
+      revisions << revision_to_hash(revision)
+    end
+
+    revisions
   end
 end
