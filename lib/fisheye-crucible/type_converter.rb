@@ -41,6 +41,7 @@ class String
     elsif response_type.eql? 'pathinfo'
       return pathinfo_to_hash(doc)
     elsif response_type.eql? 'revision'
+      return revision_to_hash(doc)
     end
   end
 
@@ -87,6 +88,7 @@ class String
       response_type = element.name
       responses << element.text
     end
+
     responses
   end
 
@@ -112,6 +114,29 @@ class String
         path_names[path_name][attribute.name.to_sym] = boolean_value
       end
     end
+
     path_names
+  end
+
+  ##
+  # Takes Fisheye/Crucible's <revision> return type and turns it in to a single
+  #   Hash.
+  # 
+  # @param [REXML::Document] xml_doc The XML document to convert.
+  # @return [Hash] The info about the revision.
+  def revision_to_hash(xml_doc)
+    details = {}
+
+    xml_doc.root.elements['//revision'].attributes.each do |attribute|
+      # Convert the value to an Int if the string is just a number
+      if attribute[1] =~ /^\d+$/
+        details[attribute.first.to_sym] = attribute[1].to_i
+      else
+        details[attribute.first.to_sym] = attribute[1]
+      end
+    end
+    details[:log] = xml_doc.root.elements['//log'].text
+
+    details
   end
 end
