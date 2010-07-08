@@ -42,6 +42,9 @@ class String
       return pathinfo_to_hash(doc)
     elsif response_type.eql? 'revision'
       return revision_to_hash(doc)
+    else
+      message = "Response type unknown: '#{response_type}'"
+      return FisheyeCrucibleError.new(message)
     end
   end
 
