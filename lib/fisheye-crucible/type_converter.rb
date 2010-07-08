@@ -31,15 +31,16 @@ class String
 
     puts "responses length = #{responses.length}"
     # If we have 0 or 1 actual strings, return the string or ""
-    if response_type == 'string' and responses.length <= 1
+    if response_type.eql? 'string' and responses.length <= 1
       return string_to_string(doc)
     # If we have mulitple strings, return the Array of Strings
-    elsif response_type == 'string'
+    elsif response_type.eql? 'string'
       return string_to_array(doc)
-    elsif response_type == 'boolean'
+    elsif response_type.eql? 'boolean'
       return boolean_to_true_false(doc)
-    elsif response_type == 'pathinfo'
+    elsif response_type.eql? 'pathinfo'
       return pathinfo_to_hash(doc)
+    elsif response_type.eql? 'revision'
     end
   end
 
