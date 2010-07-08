@@ -51,6 +51,10 @@ class String
   end
 
   ##
+  # PRIVATES!
+  private
+
+  ##
   # Converts a REXML::Document with 1 element of type <string> into a String.
   # 
   # @param [REXML::Document] xml_doc The XML document to convert.
