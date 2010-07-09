@@ -209,7 +209,25 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   end
   alias :pathHistory :path_history
 
-  def changeset
+  ##
+  # Gets information about a changeset.
+  # 
+  # @param [String] repository The repository for which to get the changeset
+  #   info about.
+  # @param [Fixnum] csid The changeset ID to get the info about.
+  # @return [Hash] All of the changeset info as defined by the API.
+  def changeset(repository, csid)
+    changeset_xml = @fisheye_rest['api/rest/changeset'].post :auth => @token,
+      :rep => repository,
+      :csid => csid.to_s
+
+    response = changeset_xml.to_ruby
+
+    if response.class == FisheyeCrucibleError
+      raise response
+    else
+      return response
+    end
   end
   alias_method :getChangeset, :changeset
 rescue FisheyeCrucibleError => e
