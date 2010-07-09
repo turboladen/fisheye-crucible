@@ -70,7 +70,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
       return response
     end
   end
-  alias :fisheyeVersion :fisheye_version
+  alias_method :fisheyeVersion, :fisheye_version
 
   ##
   # Gets the version of Crucible.
@@ -87,7 +87,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
       return response
     end
   end
-  alias :crucibleVersion :crucible_version
+  alias_method :crucibleVersion, :crucible_version
 
   ##
   # Gets the list of repositories to an array.
@@ -105,7 +105,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
       return response
     end
   end
-  alias :listRepositories :repositories
+  alias_method :listRepositories, :repositories
 
   ##
   # Gets the file/dir listing from a repository.
@@ -128,7 +128,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
       return response
     end
   end
-  alias :listPaths :list_paths_from
+  alias_method :listPaths, :list_paths_from
 
   ##
   # Gets details about a specific file/directory revision from the given
@@ -154,7 +154,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
       return response
     end
   end
-  alias :getRevision :revision
+  alias_method :getRevision, :revision
 
   ##
   # Gets tags associated with a file/directory revision.
@@ -187,7 +187,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
       end
 =end
   end
-  alias :listTagsForRevision :tags
+  alias_method :listTagsForRevision, :tags
 
   ##
   # Gets the history for a file/directory, which is a list of revisions and
@@ -208,6 +208,10 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     end
   end
   alias :pathHistory :path_history
+
+  def changeset
+  end
+  alias_method :getChangeset, :changeset
 rescue FisheyeCrucibleError => e
   puts e.message
 end
