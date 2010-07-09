@@ -38,6 +38,8 @@ class String
       return revision_to_hash(doc)
     elsif response_type.eql? 'history'
       return history_to_array(doc)
+    elsif response_type.eql? 'changeset'
+      return changeset_to_hash(doc)
     else
       message = "Response type unknown: '#{response_type}'"
       return FisheyeCrucibleError.new(message)
@@ -159,5 +161,40 @@ class String
     end
 
     revisions
+  end
+
+  ##
+  # Takes Fisheye/Crucible's <changeset> return type and turns it in to a Hash.
+  # 
+  # @param [REXML::Document] xml_doc The XML document to convert.
+  # @return [Hash] Hash containting the changeset history information as
+  #   defined by the API.
+  def changeset_to_hash(xml_doc)
+    details = {}
+
+    xml_doc.root.elements['//changeset'].attributes.each do |attribute|
+      # Convert the value to an Int if the string is just a number
+      if attribute[1] =~ /^\d+$/
+        details[attribute.first.to_sym] = attribute[1].to_i
+      else
+        details[attribute.first.to_sym] = attribute[1]
+      end
+    end
+    details[:log] = xml_doc.root.elements['//log'].text
+    
+    # Revisions is an Array of Hashes, where each Hash is a key/value pair that
+    #   contains the path and revsion of one of the files/directories that's 
+    #   part of the changeset.
+    details[:revisions] = []
+    revision = {}
+
+    xml_doc.root.elements.each('//revisionkey') do |element|
+      revision = { :path => element.attributes['path'],
+        :rev => element.attributes['rev'].to_i
+      }
+      details[:revisions] << revision
+    end
+
+    details
   end
 end
