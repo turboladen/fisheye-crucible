@@ -193,6 +193,10 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # Gets the history for a file/directory, which is a list of revisions and
   #   their associated info.
   # 
+  # @param [String] repository The repository for which to get the history
+  #   info about.
+  # @param [String] path The path, relative to root, for which to get info
+  #   about.
   # @return [Array<Hash>] The list of revisions.
   def path_history(repository, path)
     history_xml = @fisheye_rest['api/rest/pathHistory'].post :auth => @token,
