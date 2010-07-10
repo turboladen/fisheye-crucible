@@ -17,6 +17,36 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   end
 
   ##
+  # Builds and makes the REST call from the arguments given.
+  # 
+  # @param [String] url The API portion of the URL as defined by the API.
+  # @param [String] action 'post' or 'get'.
+  # @param [Hash] options The REST params to pass to the REST call.
+  # @return [Object] The Object that #to_ruby returns.
+  def build_rest_call(url, action, options=nil)
+    rest_call = "@fisheye_rest['#{url}'].#{action}"
+
+    if options
+      i = 1
+      options.each_pair do |key,value|
+        rest_call << " :#{key} => '#{value}'"
+        rest_call << ',' unless i == options.length
+        i += 1
+      end
+    end
+
+    puts "REST CALL: #{rest_call}"
+    response_xml = eval(rest_call)
+    response = response_xml.to_ruby
+
+    if response.class == FisheyeCrucibleError
+      raise response
+    end
+
+    response
+  end
+
+  ##
   # Logs in with provided credentials and returns a token that can be used for
   #   all other calls.
   # 
@@ -24,17 +54,13 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @param [String] password The password of the user to login with.
   # @return [String] The token to use for other calls.
   def login(username=nil, password=nil)
-    token_xml = @fisheye_rest['api/rest/login'].post :username => username, 
-      :password => password
-
-    response = token_xml.to_ruby
-    if response.class == FisheyeCrucibleError
-      raise response
-    elsif response.class == String
-      @token = response
-      return @token
-    end
-    return nil
+    @token = build_rest_call('api/rest/login', 
+      'post',
+      {
+        :username => username,
+        :password => password
+      }
+    )
   end
 
   ##
@@ -42,17 +68,14 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   #
   # @return [Boolean] Returns true if logout was successful.
   def logout
-    result_xml = @fisheye_rest['api/rest/logout'].post :auth => @token
-    debug(result_xml)
+    result = build_rest_call('api/rest/logout',
+      'post',
+      { :auth => @token }
+    )
 
-    response = result_xml.to_ruby
-
-    if response.class == FisheyeCrucibleError
-      raise response
-    else
-      @token = '' if response == true
-      return response
-    end
+    @token = '' if result == true
+    
+    result
   end
 
   ##
@@ -61,14 +84,9 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @return [String] The version of Fisheye.
   # @alias fisheyeVersion
   def fisheye_version
-    version_xml = @fisheye_rest['api/rest/fisheyeVersion'].get
-    response = version_xml.to_ruby
-
-    if response.class == FisheyeCrucibleError
-      raise response
-    else
-      return response
-    end
+    version = build_rest_call('api/rest/fisheyeVersion',
+      'get'
+    )
   end
   alias_method :fisheyeVersion, :fisheye_version
 
@@ -77,15 +95,9 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # 
   # @return [String] The version of Crucible.
   def crucible_version
-    version_xml = @fisheye_rest['api/rest/crucibleVersion'].get
-
-    response = version_xml.to_ruby
-
-    if response.class == FisheyeCrucibleError
-      raise response
-    else
-      return response
-    end
+    version = build_rest_call('api/rest/fisheyeVersion',
+      'get'
+    )
   end
   alias_method :crucibleVersion, :crucible_version
 
@@ -94,16 +106,10 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # 
   # @return [Array] The list of repositories.
   def repositories
-    repositories = []
-
-    repos_xml = @fisheye_rest['api/rest/repositories'].post :auth => @token
-    response = repos_xml.to_ruby
-
-    if response.class == FisheyeCrucibleError
-      raise response
-    else
-      return response
-    end
+    repos = build_rest_call('api/rest/repositories',
+      'post',
+      { :auth => @token }
+    )
   end
   alias_method :listRepositories, :repositories
 
@@ -116,17 +122,14 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @return [Hash<String><Hash>] The listing, where the key is the file/directory
   #   and the value is another Hash that contains properties of the file/directory.
   def list_paths_from(repository, path='')
-    paths_xml = @fisheye_rest['api/rest/listPaths'].post :auth => @token,
-      :rep => repository,
-      :path => path
-
-    response = paths_xml.to_ruby
-
-    if response.class == FisheyeCrucibleError
-      raise response
-    else
-      return response
-    end
+    paths = build_rest_call('api/rest/listPaths',
+      'post',
+      {
+        :auth => @token,
+        :rep => repository,
+        :path => path
+      }
+    )
   end
   alias_method :listPaths, :list_paths_from
 
@@ -141,18 +144,15 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   #   about.
   # @return [Hash] The list of details about the file revision.
   def revision(repository, path, revision)
-    revision_xml = @fisheye_rest['api/rest/revision'].post :auth => @token,
-      :rep => repository,
-      :path => path,
-      :rev => revision.to_s
-
-    response = revision_xml.to_ruby
-
-    if response.class == FisheyeCrucibleError
-      raise response
-    else
-      return response
-    end
+    revision = build_rest_call('api/rest/revision',
+      'post',
+      {
+        :auth => @token,
+        :rep => repository,
+        :path => path,
+        :rev => revision.to_s
+      }
+    )
   end
   alias_method :getRevision, :revision
 
@@ -166,6 +166,16 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   #   for.
   # @return [Hash] The list of tags for the file revision.
   def tags(repository, path, revision)
+    tags = build_rest_call('api/rest/tags',
+      'post',
+      {
+        :auth => @token,
+        :rep => repository,
+        :path => path,
+        :rev => revision.to_s
+      }
+    )
+=begin
     tags_xml = @fisheye_rest['api/rest/tags'].post :auth => @token,
       :rep => repository,
       :path => path,
@@ -173,7 +183,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
 
     #debug tags_xml
     return tags_xml.to_ruby
-=begin
       doc = REXML::Document.new(tags_xml)
     
       if doc.root.name.eql? 'error'
@@ -199,17 +208,14 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   #   about.
   # @return [Array<Hash>] The list of revisions.
   def path_history(repository, path='')
-    history_xml = @fisheye_rest['api/rest/pathHistory'].post :auth => @token,
-      :rep => repository,
-      :path => path
-
-    response = history_xml.to_ruby
-
-    if response.class == FisheyeCrucibleError
-      raise response
-    else
-      return response
-    end
+    history = build_rest_call('api/rest/pathHistory',
+      'post',
+      {
+        :auth => @token,
+        :rep => repository,
+        :path => path
+      }
+    )
   end
   alias :pathHistory :path_history
 
@@ -221,17 +227,14 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @param [Fixnum] csid The changeset ID to get the info about.
   # @return [Hash] All of the changeset info as defined by the API.
   def changeset(repository, csid)
-    changeset_xml = @fisheye_rest['api/rest/changeset'].post :auth => @token,
-      :rep => repository,
-      :csid => csid.to_s
-
-    response = changeset_xml.to_ruby
-
-    if response.class == FisheyeCrucibleError
-      raise response
-    else
-      return response
-    end
+    changeset = build_rest_call('api/rest/changeset',
+      'post',
+      {
+        :auth => @token,
+        :rep => repository,
+        :csid => csid.to_s
+      }
+    )
   end
   alias_method :getChangeset, :changeset
 rescue FisheyeCrucibleError => e
