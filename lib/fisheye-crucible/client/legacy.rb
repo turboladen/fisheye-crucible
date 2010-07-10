@@ -17,36 +17,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   end
 
   ##
-  # Builds and makes the REST call from the arguments given.
-  # 
-  # @param [String] url The API portion of the URL as defined by the API.
-  # @param [String] action 'post' or 'get'.
-  # @param [Hash] options The REST params to pass to the REST call.
-  # @return [Object] The Object that #to_ruby returns.
-  def build_rest_call(url, action, options=nil)
-    rest_call = "@fisheye_rest['#{url}'].#{action}"
-
-    if options
-      i = 1
-      options.each_pair do |key,value|
-        rest_call << " :#{key} => '#{value}'"
-        rest_call << ',' unless i == options.length
-        i += 1
-      end
-    end
-
-    puts "REST CALL: #{rest_call}"
-    response_xml = eval(rest_call)
-    response = response_xml.to_ruby
-
-    if response.class == FisheyeCrucibleError
-      raise response
-    end
-
-    response
-  end
-
-  ##
   # Logs in with provided credentials and returns a token that can be used for
   #   all other calls.
   # 
@@ -237,6 +207,57 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     )
   end
   alias_method :getChangeset, :changeset
+
+  def changesets(repository, path='/', start_date=nil, end_date=nil, max_return=nil)
+    changesets = build_rest_call('api/rest/changesets',
+      'post',
+      {
+        :auth => @token,
+        :rep => repository,
+        :path => path,
+        :start => start_date,
+        :end => end_date,
+        :max_return => max_return
+      }
+    )
+  end
+  alias_method :listChangesets, :changesets
+
+  ##
+  # Privates
+  private
+
+  ##
+  # Builds and makes the REST call from the arguments given.
+  # 
+  # @param [String] url The API portion of the URL as defined by the API.
+  # @param [String] action 'post' or 'get'.
+  # @param [Hash] options The REST params to pass to the REST call.
+  # @return [Object] The Object that #to_ruby returns.
+  def build_rest_call(url, action, options=nil)
+    rest_call = "@fisheye_rest['#{url}'].#{action}"
+
+    if options
+      i = 1
+      options.each_pair do |key,value|
+        unless value.nil?
+          rest_call << " :#{key} => '#{value}'"
+          rest_call << ',' unless i == options.length
+          i += 1
+        end
+      end
+    end
+
+    puts "REST CALL: #{rest_call}"
+    response_xml = eval(rest_call)
+    response = response_xml.to_ruby
+
+    if response.class == FisheyeCrucibleError
+      raise response
+    end
+
+    response
+  end
 rescue FisheyeCrucibleError => e
   puts e.message
 end
