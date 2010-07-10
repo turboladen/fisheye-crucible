@@ -40,6 +40,8 @@ class String
       return history_to_array(doc)
     elsif response_type.eql? 'changeset'
       return changeset_to_hash(doc)
+    elsif response_type.eql? 'changesets'
+      return changesets_to_hash(doc)
     else
       message = "Response type unknown: '#{response_type}'"
       return FisheyeCrucibleError.new(message)
@@ -196,5 +198,24 @@ class String
     end
 
     details
+  end
+
+  ##
+  # Takes Fisheye/Crucible's <changesets> return type and turns it in to a
+  #   Hash.
+  #
+  # @param [REXML::Document] xml_doc The XML document to convert.
+  # @return [Hash] Contains the changeset IDs as defined by the query.
+  def changesets_to_hash(xml_doc)
+    changesets = {}
+    changesets[:csids] = []
+    
+    changesets[:max_return] = xml_doc.root.elements['//changesets'].attributes['maxReturn']
+
+    xml_doc.root.elements['//csids'].each_element do |element|
+      changesets[:csids] << element.text.to_i
+    end
+
+    changesets
   end
 end
