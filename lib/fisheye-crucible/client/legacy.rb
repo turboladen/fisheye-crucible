@@ -25,7 +25,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @return [String] The token to use for other calls.
   def login(username=nil, password=nil)
     @token = build_rest_call('api/rest/login', 
-      'post',
+      :post,
       {
         :username => username,
         :password => password
@@ -38,10 +38,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   #
   # @return [Boolean] Returns true if logout was successful.
   def logout
-    result = build_rest_call('api/rest/logout',
-      'post',
-      { :auth => @token }
-    )
+    result = build_rest_call('api/rest/logout', :post, { :auth => @token })
 
     @token = '' if result == true
     
@@ -54,9 +51,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @return [String] The version of Fisheye.
   # @alias fisheyeVersion
   def fisheye_version
-    version = build_rest_call('api/rest/fisheyeVersion',
-      'get'
-    )
+    version = build_rest_call('api/rest/fisheyeVersion', :get)
   end
   alias_method :fisheyeVersion, :fisheye_version
 
@@ -65,9 +60,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # 
   # @return [String] The version of Crucible.
   def crucible_version
-    version = build_rest_call('api/rest/fisheyeVersion',
-      'get'
-    )
+    version = build_rest_call('api/rest/fisheyeVersion', :get)
   end
   alias_method :crucibleVersion, :crucible_version
 
@@ -77,7 +70,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @return [Array] The list of repositories.
   def repositories
     repos = build_rest_call('api/rest/repositories',
-      'post',
+      :post,
       { :auth => @token }
     )
   end
@@ -93,7 +86,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   #   and the value is another Hash that contains properties of the file/directory.
   def list_paths_from(repository, path='')
     paths = build_rest_call('api/rest/listPaths',
-      'post',
+      :post,
       {
         :auth => @token,
         :rep => repository,
@@ -115,7 +108,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @return [Hash] The list of details about the file revision.
   def revision(repository, path, revision)
     revision = build_rest_call('api/rest/revision',
-      'post',
+      :post,
       {
         :auth => @token,
         :rep => repository,
@@ -137,7 +130,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @return [Hash] The list of tags for the file revision.
   def tags(repository, path, revision)
     tags = build_rest_call('api/rest/tags',
-      'post',
+      :post,
       {
         :auth => @token,
         :rep => repository,
@@ -179,7 +172,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @return [Array<Hash>] The list of revisions.
   def path_history(repository, path='')
     history = build_rest_call('api/rest/pathHistory',
-      'post',
+      :post,
       {
         :auth => @token,
         :rep => repository,
@@ -198,7 +191,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @return [Hash] All of the changeset info as defined by the API.
   def changeset(repository, csid)
     changeset = build_rest_call('api/rest/changeset',
-      'post',
+      :post,
       {
         :auth => @token,
         :rep => repository,
@@ -222,7 +215,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @param [] end_date
   def changesets(repository, path='/', max_return=nil, start_date=nil, end_date=nil)
     changesets = build_rest_call('api/rest/changesets',
-      'post',
+      :post,
       {
         :auth => @token,
         :rep => repository,
@@ -234,6 +227,17 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     )
   end
   alias_method :listChangesets, :changesets
+
+  def query(repository, query)
+    response = build_rest_call('api/rest/query',
+      :post,
+      {
+        :auth => @token,
+        :rep => repository,
+        :query => query
+      }
+    )
+  end
 
   ##
   # Privates
