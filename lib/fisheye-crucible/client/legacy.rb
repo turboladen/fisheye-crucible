@@ -208,7 +208,19 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   end
   alias_method :getChangeset, :changeset
 
-  def changesets(repository, path='/', start_date=nil, end_date=nil, max_return=nil)
+  ##
+  # Gets all changeset IDs (csids) that match the parameters given.
+  # 
+  # @param [String] repository The repository for which to get the changesets for.
+  # @param [String] path Path to the item(s) to get changesets for.  Can only be a
+  #   directory.
+  # @param [Fixnum] max_return The maximum number of values to return.  If not
+  #   set, this is limited by the internal Fisheye server.  If set, the most
+  #   recent results are returned.
+  # @param [DateTime] start_date The DateTime object representing the date for
+  #   which to filter the query.
+  # @param [] end_date
+  def changesets(repository, path='/', max_return=nil, start_date=nil, end_date=nil)
     changesets = build_rest_call('api/rest/changesets',
       'post',
       {
@@ -217,7 +229,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
         :path => path,
         :start => start_date,
         :end => end_date,
-        :max_return => max_return
+        :maxReturn => max_return.to_s
       }
     )
   end
@@ -238,11 +250,13 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     rest_call = "@fisheye_rest['#{url}'].#{action}"
 
     if options
+      actual_options = non_nil_options_in options
+
       i = 1
-      options.each_pair do |key,value|
+      actual_options.each_pair do |key,value|
         unless value.nil?
           rest_call << " :#{key} => '#{value}'"
-          rest_call << ',' unless i == options.length
+          rest_call << ',' unless i == actual_options.length
           i += 1
         end
       end
@@ -257,6 +271,20 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     end
 
     response
+  end
+
+  ##
+  # Removes all key/value pairs from Hash that have a nil value and returns
+  #   a Hash with keys that have values.
+  # 
+  # @param [Hash] options The Hash to remove nil key/value pairs from.
+  def non_nil_options_in options
+    non_nil_options = {}
+    options.each_pair do |k,v|
+      non_nil_options[k] = v unless v.nil?
+    end
+
+    non_nil_options
   end
 rescue FisheyeCrucibleError => e
   puts e.message
