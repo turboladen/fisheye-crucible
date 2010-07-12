@@ -4,7 +4,6 @@ require 'fisheye-crucible'
 class String
   def to_ruby
     doc = REXML::Document.new self
-puts doc
 
     type = doc.root.name
     message = doc.root.text
@@ -46,7 +45,7 @@ puts doc
     elsif response_type.eql? 'revisionkey'
       return revisionkeys_to_array(doc)
     elsif response_type.eql? 'row'
-      puts custom_to_hash(doc)
+      return custom_to_array(doc)
     else
       message = "Response type unknown: '#{response_type}'"
       return FisheyeCrucibleError.new(message)
@@ -71,11 +70,11 @@ puts doc
   #   contain such a type, nil is returned.
   # 
   # @param [String] string The String to convert.
-  # @return [Boolean] true, false, nil.
+  # @return [Boolean,String] true, false, or the original string.
   def string_to_true_false(string)
     return true if string.eql? 'true'
     return false if string.eql? 'false'
-    return nil
+    return string
   end
 
   ##
@@ -245,5 +244,30 @@ puts doc
     end
 
     changesets
+  end
+
+  ##
+  # Takes Fisheye/Crucible's custom <row> return type (from a query) and turns
+  #   it in to an Array of Hashes containing the results from the query.
+  # 
+  # @param [REXML::Document] xml_doc The XML document to convert.
+  # @return [Array] The result from the query.
+  def custom_to_array(xml_doc)
+    responses = []
+    
+    xml_doc.elements.each('//row') do |element|
+      response = {}
+      element.each do |subs|
+        if subs.is_a? REXML::Text
+        else
+          # TODO: If subs.text is a Boolean string, it doesn't get converted
+          # to the actual Boolean.  Same if it's an int or empty string.
+          response[subs.name.to_sym] = subs.text
+        end
+      end
+      responses << response
+    end
+
+    responses
   end
 end
