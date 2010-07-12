@@ -228,6 +228,14 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   end
   alias_method :listChangesets, :changesets
 
+  ##
+  # Sends an EyeQL query to the server for a given repository.  Return types
+  #   can differ depending on the 'return-clause' used in the query.  For more
+  #   info, see http://confluence.atlassian.com/display/FISHEYE/EyeQL+Reference+Guide.
+  # 
+  # @param [String] repository The repository to run the EyeQL query on.
+  # @param [String] query The EyeQL query to run.
+  # @return [Object]
   def query(repository, query)
     response = build_rest_call('api/rest/query',
       :post,
