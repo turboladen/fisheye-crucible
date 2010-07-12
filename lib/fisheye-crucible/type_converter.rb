@@ -4,6 +4,7 @@ require 'fisheye-crucible'
 class String
   def to_ruby
     doc = REXML::Document.new self
+puts doc
 
     type = doc.root.name
     message = doc.root.text
@@ -42,6 +43,10 @@ class String
       return changeset_to_hash(doc)
     elsif response_type.eql? 'changesets'
       return changesets_to_hash(doc)
+    elsif response_type.eql? 'revisionkey'
+      return revisionkeys_to_array(doc)
+    elsif response_type.eql? 'row'
+      puts custom_to_hash(doc)
     else
       message = "Response type unknown: '#{response_type}'"
       return FisheyeCrucibleError.new(message)
@@ -190,14 +195,37 @@ class String
     details[:revisions] = []
     revision = {}
 
+=begin
     xml_doc.root.elements.each('//revisionkey') do |element|
       revision = { :path => element.attributes['path'],
         :rev => element.attributes['rev'].to_i
       }
-      details[:revisions] << revision
     end
+=end
+    details[:revisions] << revisionkeys_to_hash(xml_doc)
+    #details[:revisions] << revision
 
     details
+  end
+
+  ##
+  # Takes Fisheye/Crucible's <revisionkey> return type and turns it in to an
+  #   Array of Hashes.
+  # 
+  # @param [REXML::Document] xml_doc The XML document to convert.
+  # @return [Array<Hash>] The Array of path & rev data.
+  def revisionkeys_to_array(xml_doc)
+    revisionkeys = []
+
+    xml_doc.root.elements.each('//revisionkey') do |element|
+      revisionkey = { :path => element.attributes['path'],
+        :rev => element.attributes['rev'].to_i
+      }
+
+      revisionkeys << revisionkey
+    end
+
+    revisionkeys
   end
 
   ##
