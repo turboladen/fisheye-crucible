@@ -4,7 +4,7 @@
 
 == DESCRIPTION:
 
-This gem is a wrapper around the REST API for Atlassian's {Fisheye}[http://www.atlassian.com/software/fisheye/]/{Crucible}[http://www.atlassian.com/software/crucible/].  It currently only provides access to their {legacy API}[http://confluence.atlassian.com/display/FECRUDEV/FishEye+Legacy+Remote+API], although
+This gem is a wrapper around the REST API for Atlassian's {Fisheye}[http://www.atlassian.com/software/fisheye/] and {Crucible}[http://www.atlassian.com/software/crucible/].  It currently only provides access to their {legacy API}[http://confluence.atlassian.com/display/FECRUDEV/FishEye+Legacy+Remote+API], although
 the wrapping the current API is in the works.
 
 I want to keep the dependency list low, so at this point XML parsing is all done
