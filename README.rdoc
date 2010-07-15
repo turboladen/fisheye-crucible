@@ -17,6 +17,11 @@ with REXML.
 * Access methods via Ruby style method calls _or_ the API function name:
   * Ruby style:
 
+
+
+
+
+
   fc.repositories
 
   * Fisheye/Crucible API style:
