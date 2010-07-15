@@ -1,32 +1,47 @@
 = fisheye-crucible
 
-* http://github.com/#{github_username}/#{project_name}
+* http://github.com/turboladen/fisheye-crucible
 
 == DESCRIPTION:
 
-FIX (describe your package)
+This gem is a wrapper around the REST API for Atlassian's {Fisheye}[http://www.atlassian.com/software/fisheye/]/{Crucible}[http://www.atlassian.com/software/crucible/].  It currently only provides access to their {legacy API}[http://confluence.atlassian.com/display/FECRUDEV/FishEye+Legacy+Remote+API], although
+the wrapping the current API is in the works.
+
+I want to keep the dependency list low, so at this point XML parsing is all done
+with REXML.
 
 == FEATURES/PROBLEMS:
 
-* FIX (list of features or problems)
+* Legacy API (<=1.6.x) calls work
+* Current API (2.x) calls no workie (yet!), although 2.x installs with legacy support
+turned on can use the legacy API just fine.
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+A quick example:
+
+  server = 'http://sandbox.fisheye.atlassian.com'
+  fc = FisheyeCrucible::Client::Legacy.new(server)
+  fc.login 'guy', 'smiley'
+  fc.fisheye_version      # => "2.2.4"
+  fc.repositories         # => ['antlr', 'google-guice', 'rails']
+  
 
 == REQUIREMENTS:
 
-* FIX (list of requirements)
+* Ruby
+  * 1.8.7
+  * 1.9.1
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+* (sudo) gem install fisheye-crucible
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2010 FIXME full name
+Copyright (c) 2010 Steve Loveless
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
