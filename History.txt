@@ -1,4 +1,15 @@
-=== 0.0.1 2010-07-02
+=== 0.0.1 2010-07-15
 
-* 1 major enhancement:
-  * Initial release
+* Added support for Fisheye/Crucible's Legacy API.  Methods supported:
+  * login
+  * logout
+  * fisheye_version
+  * crucible_version
+  * repositories
+  * paths
+  * revision
+  * tags
+  * path_history
+  * changeset
+  * changesets
+  * query
