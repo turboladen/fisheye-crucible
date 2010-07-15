@@ -13,8 +13,7 @@ with REXML.
 == FEATURES/PROBLEMS:
 
 * Legacy API (<=1.6.x) calls work
-* Current API (2.x) calls no workie (yet!), although 2.x installs with legacy support
- turned on can use the legacy API just fine.
+* Current API (2.x) calls no workie (yet!), although 2.x installs with legacy support turned on can use the legacy API just fine.
 
 == SYNOPSIS:
 
