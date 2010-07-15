@@ -5,4 +5,5 @@ require 'fisheye_crucible_exception'
 
 module FisheyeCrucible
   VERSION = '0.0.1'
+  WWW = 'http://github.com/turboladen/fisheye-crucible'
 end
