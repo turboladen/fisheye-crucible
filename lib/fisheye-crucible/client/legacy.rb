@@ -274,7 +274,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
       end
     end
 
-    puts "REST CALL: #{rest_call}"
     response_xml = eval(rest_call)
     response = response_xml.to_ruby
 
