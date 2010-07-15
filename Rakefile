@@ -35,6 +35,9 @@ $hoe = Hoe.spec 'fisheye-crucible' do
   self.readme_file          = 'README.rdoc'
   self.history_file         = 'History.txt'
   self.rspec_options        = ['--color', '--format', 'specdoc']
+  self.extra_deps           += [
+    ['rest-client']
+  ]
   self.extra_dev_deps       += [
     ['rspec'],
     ['yard'],
