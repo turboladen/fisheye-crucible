@@ -38,6 +38,11 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   #
   # @return [Boolean] Returns true if logout was successful.
   def logout
+    unless @token
+      error_message = "Can't log out--it seems you're not logged in."
+      raise FisheyeCrucibleError, error_message
+    end
+
     result = build_rest_call('api/rest/logout', :post, { :auth => @token })
 
     @token = '' if result == true
