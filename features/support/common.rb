@@ -33,3 +33,7 @@ Given /^I have logged in$/ do
   @fc.login 'gemtest', 'gemtest'
   @fc.instance_eval("@token").should_not be_nil
 end
+
+Given /^I have not logged in$/ do
+  @fc.instance_eval("@token").should be_nil
+end
