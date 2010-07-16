@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + "/../../lib/fisheye-crucible"
+require File.dirname(__FILE__) + "/../../lib/fisheye-crucible/client/legacy"
 
 gem 'cucumber'
 require 'cucumber'
