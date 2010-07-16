@@ -29,6 +29,8 @@ Fisheye/Crucible API style:
 
 A quick example:
 
+  require 'fisheye-crucible/client/legacy'
+  
   server = 'http://sandbox.fisheye.atlassian.com'
   fc = FisheyeCrucible::Client::Legacy.new(server)
   fc.login 'guy', 'smiley'
