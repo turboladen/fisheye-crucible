@@ -20,11 +20,6 @@ Then /^I receive an authentication error$/ do
   @login.should raise_error(FisheyeCrucibleError)
 end
 
-Given /^I have logged in$/ do
-  @fc.login 'gemtest', 'gemtest'
-  @fc.instance_eval("@token").should_not be_nil
-end
-
 When /^I logout$/ do
   @logout = lambda { @fc.logout }
   @logout.should_not be_nil

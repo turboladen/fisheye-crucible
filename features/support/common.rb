@@ -27,3 +27,9 @@ module CommonHelpers
 end
 
 World(CommonHelpers)
+
+# Common steps
+Given /^I have logged in$/ do
+  @fc.login 'gemtest', 'gemtest'
+  @fc.instance_eval("@token").should_not be_nil
+end
