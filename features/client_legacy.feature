@@ -14,3 +14,9 @@ Feature: Client to the legacy API
     When I call "crucibleVersion"
     Then I should receive a "String"
       And that String should be in the form x.x.x
+
+  Scenario: listRepositories
+    Given I have logged in
+    When I call "listRepositories"
+    Then I should receive an "Array"
+      And that Array should contain Strings
