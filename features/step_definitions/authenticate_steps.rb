@@ -30,7 +30,15 @@ When /^I logout$/ do
   @logout.should_not be_nil
 end
 
-Then /^I should receive confirmation that I have logged out$/ do
+Then /^I receive confirmation that I have logged out$/ do
   result = @logout.call
   result.should be_true
+end
+
+Given /^I have not logged in$/ do
+  @fc.instance_eval("@token").should be_nil
+end
+
+Then /^I receive an error telling me I'm not logged in$/ do
+  @logout.should raise_error(FisheyeCrucibleError)
 end

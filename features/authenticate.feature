@@ -19,4 +19,10 @@ Feature:  Authenticate as a Fisheye/Crucible user
   Scenario: Logout from valid session
     Given I have logged in
     When I logout
-    Then I should receive confirmation that I have logged out
+    Then I receive confirmation that I have logged out
+
+  @negative
+  Scenario: Logout when not logged in
+    Given I have not logged in
+    When I logout
+    Then I receive an error telling me I'm not logged in
