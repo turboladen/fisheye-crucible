@@ -201,7 +201,7 @@ class String
       }
     end
 =end
-    details[:revisions] << revisionkeys_to_hash(xml_doc)
+    details[:revisions] << revisionkeys_to_array(xml_doc)
     #details[:revisions] << revision
 
     details
