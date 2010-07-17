@@ -37,11 +37,14 @@ Feature: Client to the legacy API
     | listRepositories  |                               | Array         |
     | listPaths         | 'antlr'                       | Hash          |
     | listPaths         | 'antlr','tool'                | Hash          |
-    | getRevision       | 'antlr','BUILD.txt',5847      | Hash  |
-    | pathHistory       | 'antlr','BUILD.txt'           | Array      |
+    | getRevision       | 'antlr','BUILD.txt',5847      | Hash          |
+    | pathHistory       | 'antlr','BUILD.txt'           | Array         |
     | getChangeset      | 'antlr',5847                  | Hash          |
     | listChangesets    | 'antlr'                       | Hash          |
     | listChangesets    | 'antlr','tool'                | Hash          |
     | listChangesets    | 'antlr','tool',1              | Hash          |
     | listChangesets    | 'antlr','tool',1,'2008-07-05T07:08:16-07:00'| Hash|
     | listChangesets    | 'antlr','tool',1,'2008-07-05T07:08:16-07:00', '2009-07-05T07:08:16-07:00'| Hash  |
+    | query             | 'antlr','select revisions from dir /tool' | Array |
+    | query             | 'antlr','select revisions from dir /tool return path' | Array |
+    | query             | 'antlr','select revisions from dir /tool return path as test' | Array |
