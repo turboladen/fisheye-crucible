@@ -36,3 +36,4 @@ Feature: Client to the legacy API
     | crucibleVersion   |               | String        |
     | listRepositories  |               | Array         |
     | listPaths         | 'antlr'       | Hash          |
+    | getRevision       | 'antlr','BUILD.txt',5847| Hash|
