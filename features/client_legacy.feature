@@ -30,6 +30,7 @@ Feature: Client to the legacy API
     When I call "<api_method>" with parameters "<parameters>"
     Then I should receive a "<return_type>"
 
+  @positive
   Scenarios: Calls return proper types
     | api_method        | parameters                    | return_type   |
     | fisheyeVersion    |                               | String        |
@@ -48,3 +49,15 @@ Feature: Client to the legacy API
     | query             | 'antlr','select revisions from dir /tool' | Array |
     | query             | 'antlr','select revisions from dir /tool return path' | Array |
     | query             | 'antlr','select revisions from dir /tool return path as test' | Array |
+
+  @negative
+  Scenario Outline: Raise exceptions
+    Given I have logged in
+    When I call "<api_method>" with parameters "<parameters>"
+    Then I should receive an exception of type "<exception_type>"
+
+  Scenarios: Calls throw exception when passed invalid parameters
+    | api_method        | parameters                    | exception_type |
+    | fisheyeVersion    | 'test'                        | ArgumentError |
+    | crucibleVersion   | 'test'                        | ArgumentError |
+      
