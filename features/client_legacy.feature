@@ -31,9 +31,12 @@ Feature: Client to the legacy API
     Then I should receive a "<return_type>"
 
   Scenarios: Calls return proper types
-    | api_method        | parameters    | return_type   |
-    | fisheyeVersion    |               | String        |
-    | crucibleVersion   |               | String        |
-    | listRepositories  |               | Array         |
-    | listPaths         | 'antlr'       | Hash          |
-    | getRevision       | 'antlr','BUILD.txt',5847| Hash|
+    | api_method          | parameters    | return_type   |
+    | fisheyeVersion      |               | String        |
+    | crucibleVersion     |               | String        |
+    | listRepositories    |               | Array         |
+    | listPaths           | 'antlr'       | Hash          |
+    | listPaths           | 'antlr','tool'| Hash          |
+    | getRevision         | 'antlr','BUILD.txt',5847| Hash|
+    | pathHistory         | 'antlr','BUILD.txt'| Array    |
+    | getChangeset        | 'antlr',5847  | Hash          |
