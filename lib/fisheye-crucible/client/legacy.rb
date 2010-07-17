@@ -134,6 +134,8 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   #   for.
   # @return [Hash] The list of tags for the file revision.
   def tags(repository, path, revision)
+    puts "WARNING: This method is untested!"
+
     tags = build_rest_call('api/rest/tags',
       :post,
       {
