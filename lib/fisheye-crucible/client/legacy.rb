@@ -217,9 +217,12 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @param [Fixnum] max_return The maximum number of values to return.  If not
   #   set, this is limited by the internal Fisheye server.  If set, the most
   #   recent results are returned.
-  # @param [DateTime] start_date The DateTime object representing the date for
-  #   which to filter the query.
-  # @param [] end_date
+  # @param [DateTime] start_date The DateTime object representing the start
+  #   date for which to filter the query.
+  # @param [DateTime] end_date The DateTime object representing the end date
+  #   for which to filter the query.
+  # @return [Hash<Array,String>] :csids => the Array of changeset IDs;
+  #   :max_return => Max values returned.
   def changesets(repository, path='/', max_return=nil, start_date=nil, end_date=nil)
     changesets = build_rest_call('api/rest/changesets',
       :post,
@@ -229,7 +232,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
         :path => path,
         :start => start_date,
         :end => end_date,
-        :maxReturn => max_return.to_s
+        :maxReturn => max_return
       }
     )
   end
