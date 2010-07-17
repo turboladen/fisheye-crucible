@@ -1,5 +1,5 @@
-When /^I call "([^"]*)"$/ do |api_method|
-  @result = eval("@fc.#{api_method}")
+When /^I call "([^"]*)" with parameters "([^"]*)"$/ do |api_method, parameters|
+  @result = eval("@fc.#{api_method}(#{parameters})")
 end
 
 Then /^I should receive an? "([^"]*)"$/ do |result_type|
@@ -14,4 +14,9 @@ Then /^that Array should contain Strings$/ do
   @result.each do |r|
     r.class.should == eval('String')
   end
+end
+
+Given /^I have a list of repositories$/ do
+  @repos = @fc.repositories
+  @result.should_not be_empty
 end
