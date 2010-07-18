@@ -6,13 +6,13 @@ class String
     doc = REXML::Document.new self
 
     type = doc.root.name
-    message = doc.root.text
+    doc_text = doc.root.text
 
     responses = []
     response_type = ''
 
     if type == 'error'
-      return FisheyeCrucibleError.new(message)
+      return FisheyeCrucibleError.new(doc_text)
     elsif type == 'response'
       doc.root.each_element do |element|
         # The data type
@@ -22,6 +22,8 @@ class String
         responses << element.text
       end
     else
+      message = "Not sure what to do with this response:\n#{doc_text}"
+      return FisheyeCrucibleError.new(message)
     end
 
     # If we have 0 or 1 actual strings, return the string or ""
