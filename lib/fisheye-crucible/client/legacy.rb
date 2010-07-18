@@ -56,7 +56,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @return [String] The version of Fisheye.
   # @alias fisheyeVersion
   def fisheye_version
-    version = build_rest_call('api/rest/fisheyeVersion', :get)
+    build_rest_call('api/rest/fisheyeVersion', :get)
   end
   alias_method :fisheyeVersion, :fisheye_version
 
@@ -65,7 +65,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # 
   # @return [String] The version of Crucible.
   def crucible_version
-    version = build_rest_call('api/rest/fisheyeVersion', :get)
+    build_rest_call('api/rest/fisheyeVersion', :get)
   end
   alias_method :crucibleVersion, :crucible_version
 
@@ -74,7 +74,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # 
   # @return [Array] The list of repositories.
   def repositories
-    repos = build_rest_call('api/rest/repositories',
+    build_rest_call('api/rest/repositories',
       :post,
       { :auth => @token }
     )
@@ -90,7 +90,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @return [Hash<String><Hash>] The listing, where the key is the file/directory
   #   and the value is another Hash that contains properties of the file/directory.
   def list_paths_from(repository, path='')
-    paths = build_rest_call('api/rest/listPaths',
+    build_rest_call('api/rest/listPaths',
       :post,
       {
         :auth => @token,
@@ -112,7 +112,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   #   about.
   # @return [Hash] The list of details about the file revision.
   def revision(repository, path, revision)
-    revision = build_rest_call('api/rest/revision',
+    build_rest_call('api/rest/revision',
       :post,
       {
         :auth => @token,
@@ -178,7 +178,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   #   about.
   # @return [Array<Hash>] The list of revisions.
   def path_history(repository, path='')
-    history = build_rest_call('api/rest/pathHistory',
+    build_rest_call('api/rest/pathHistory',
       :post,
       {
         :auth => @token,
@@ -197,7 +197,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @param [Fixnum] csid The changeset ID to get the info about.
   # @return [Hash] All of the changeset info as defined by the API.
   def changeset(repository, csid)
-    changeset = build_rest_call('api/rest/changeset',
+    build_rest_call('api/rest/changeset',
       :post,
       {
         :auth => @token,
@@ -224,7 +224,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @return [Hash<Array,String>] :csids => the Array of changeset IDs;
   #   :max_return => Max values returned.
   def changesets(repository, path='/', max_return=nil, start_date=nil, end_date=nil)
-    changesets = build_rest_call('api/rest/changesets',
+    build_rest_call('api/rest/changesets',
       :post,
       {
         :auth => @token,
@@ -247,7 +247,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # @param [String] query The EyeQL query to run.
   # @return [Object]
   def query(repository, query)
-    response = build_rest_call('api/rest/query',
+    build_rest_call('api/rest/query',
       :post,
       {
         :auth => @token,
