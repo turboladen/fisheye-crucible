@@ -271,7 +271,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   def build_rest_call(url, action, options=nil)
     rest_call = "@fisheye_rest['#{url}'].#{action}"
 
-    if options
+    unless options.nil?
       actual_options = non_nil_options_in options
 
       option_count = 1
