@@ -274,12 +274,12 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     if options
       actual_options = non_nil_options_in options
 
-      i = 1
+      option_count = 1
       actual_options.each_pair do |key,value|
         unless value.nil?
           rest_call << " :#{key} => '#{value}'"
-          rest_call << ',' unless i == actual_options.length
-          i += 1
+          rest_call << ',' unless option_count == actual_options.length
+          option_count += 1
         end
       end
     end
