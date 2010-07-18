@@ -57,7 +57,17 @@ Feature: Client to the legacy API
     Then I should receive an exception of type "<exception_type>"
 
   Scenarios: Calls throw exception when passed invalid parameters
-    | api_method        | parameters                    | exception_type |
-    | fisheyeVersion    | 'test'                        | ArgumentError |
-    | crucibleVersion   | 'test'                        | ArgumentError |
-      
+    | api_method        | parameters                    | exception_type  |
+    | fisheyeVersion    | 'test'                        | ArgumentError   |
+    | crucibleVersion   | 'test'                        | ArgumentError   |
+    | listRepositories  | 'test'                        | ArgumentError   |
+    | listPaths         | 'blahblahblah'                | FisheyeCrucibleError |
+    | listPaths         | 'antlr','blahblahblah'        | FisheyeCrucibleError |
+    | getRevision       | 'blahblahblah','BUILD.txt',5847  | FisheyeCrucibleError |
+    | getRevision       | 'antlr','blahblahblah',5847   | FisheyeCrucibleError |
+    | getRevision       | 'antlr','BUILD.txt',9999999   | FisheyeCrucibleError |
+    | getRevision       | 'antlr','BUILD.txt','blahblahblah'   | RestClient::InternalServerError |
+    | pathHistory       | 'blahblahblah','BUILD.txt'    | FisheyeCrucibleError |
+    | pathHistory       | 'antlr','blahblahblah'        | FisheyeCrucibleError |
+    | pathHistory       | 'antlr',123456789             | FisheyeCrucibleError |
+
