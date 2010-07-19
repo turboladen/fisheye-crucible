@@ -48,15 +48,17 @@ $hoe = Hoe.spec 'fisheye-crucible' do
 
   # Extra Yard options
   self.yard_title   = "#{self.name} Documentation (#{self.version})"
-  self.yard_markup  = :rdoc
+  self.yard_markup  = "rdoc"
   self.yard_opts    += ['--main', self.readme_file]
   self.yard_opts    += ['--output-dir', 'doc']
   self.yard_opts    += ['--private']
   self.yard_opts    += ['--protected']
   self.yard_opts    += ['--verbose']
+=begin
   self.yard_opts    += ['--files', 
     ['Manifest.txt', 'History.txt']
   ]    
+=end
 end
 
 #-------------------------------------------------------------------------------
