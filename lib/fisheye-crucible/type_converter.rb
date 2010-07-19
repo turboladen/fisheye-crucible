@@ -229,7 +229,8 @@ class String
     changesets = {}
     changesets[:csids] = []
     
-    changesets[:max_return] = xml_doc.root.elements['//changesets'].attributes['maxReturn']
+    changesets[:max_return] = xml_doc.root.elements['//changesets'].
+      attributes['maxReturn']
 
     xml_doc.root.elements['//csids'].each_element do |element|
       changesets[:csids] << element.text.to_i
