@@ -194,17 +194,7 @@ class String
     #   contains the path and revsion of one of the files/directories that's 
     #   part of the changeset.
     details[:revisions] = []
-    revision = {}
-
-=begin
-    xml_doc.root.elements.each('//revisionkey') do |element|
-      revision = { :path => element.attributes['path'],
-        :rev => element.attributes['rev'].to_i
-      }
-    end
-=end
     details[:revisions] << revisionkeys_to_array(xml_doc)
-    #details[:revisions] << revision
 
     details
   end
