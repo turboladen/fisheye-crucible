@@ -70,7 +70,7 @@ class String
   ##
   # Converts a String to its related Boolean type.  If the string doesn't
   #   contain such a type, nil is returned.
-  # 
+  #
   # @param [String] string The String to convert.
   # @return [Boolean,String] true, false, or the original string.
   def string_to_true_false(string)
