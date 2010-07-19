@@ -19,12 +19,12 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   ##
   # Logs in with provided credentials and returns a token that can be used for
   #   all other calls.
-  # 
+  #
   # @param [String] username The user to login with.
   # @param [String] password The password of the user to login with.
   # @return [String] The token to use for other calls.
   def login(username=nil, password=nil)
-    @token = build_rest_call('api/rest/login', 
+    @token = build_rest_call('api/rest/login',
       :post,
       {
         :username => username,
@@ -46,13 +46,13 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     result = build_rest_call('api/rest/logout', :post, { :auth => @token })
 
     @token = '' if result == true
-    
+
     result
   end
 
   ##
   # Gets the version of Fisheye.
-  # 
+  #
   # @return [String] The version of Fisheye.
   # @alias fisheyeVersion
   def fisheye_version
@@ -62,7 +62,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
 
   ##
   # Gets the version of Crucible.
-  # 
+  #
   # @return [String] The version of Crucible.
   def crucible_version
     build_rest_call('api/rest/fisheyeVersion', :get)
@@ -71,7 +71,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
 
   ##
   # Gets the list of repositories to an array.
-  # 
+  #
   # @return [Array] The list of repositories.
   def repositories
     build_rest_call('api/rest/repositories',
@@ -83,12 +83,13 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
 
   ##
   # Gets the file/dir listing from a repository.
-  # 
+  #
   # @param [String] repository The repository to get the listing for.
-  # @param [String] path The directory in the repository to get the listing for.
-  #   If no path is given, listing is from /.
-  # @return [Hash<String><Hash>] The listing, where the key is the file/directory
-  #   and the value is another Hash that contains properties of the file/directory.
+  # @param [String] path The directory in the repository to get the listing
+  #   for.  If no path is given, listing is from /.
+  # @return [Hash<String><Hash>] The listing, where the key is the
+  #   file/directory and the value is another Hash that contains properties of
+  #   the file/directory.
   def list_paths_from(repository, path='')
     build_rest_call('api/rest/listPaths',
       :post,
@@ -104,10 +105,10 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   ##
   # Gets details about a specific file/directory revision from the given
   #   repository.
-  # 
+  #
   # @param [String] repository The repository in which the file resides.
-  # @param [String] path The path, relative to the repository, in which the file
-  #   resides.
+  # @param [String] path The path, relative to the repository, in which the
+  #   file resides.
   # @param [Fixnum] revision The revision of the file/directory to get the info
   #   about.
   # @return [Hash] The list of details about the file revision.
@@ -126,10 +127,10 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
 
   ##
   # Gets tags associated with a file/directory revision.
-  # 
+  #
   # @param [String] repository The repository in which the file resides.
-  # @param [String] path The path, relative to the repository, in which the file
-  #   resides.
+  # @param [String] path The path, relative to the repository, in which the
+  #   file resides.
   # @param [Fixnum] revision The revision of the file/directory to get the tags
   #   for.
   # @return [Hash] The list of tags for the file revision.
@@ -154,7 +155,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     #debug tags_xml
     return tags_xml.to_ruby
       doc = REXML::Document.new(tags_xml)
-    
+
       if doc.root.name.eql? 'error'
         raise doc.root.text
       elsif doc.root.name.eql? 'response' and doc.root.has_elements?
@@ -171,7 +172,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   ##
   # Gets the history for a file/directory, which is a list of revisions and
   #   their associated info.
-  # 
+  #
   # @param [String] repository The repository for which to get the history
   #   info about.
   # @param [String] path The path, relative to root, for which to get info
@@ -191,7 +192,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
 
   ##
   # Gets information about a changeset.
-  # 
+  #
   # @param [String] repository The repository for which to get the changeset
   #   info about.
   # @param [Fixnum] csid The changeset ID to get the info about.
@@ -210,10 +211,11 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
 
   ##
   # Gets all changeset IDs (csids) that match the parameters given.
-  # 
-  # @param [String] repository The repository for which to get the changesets for.
-  # @param [String] path Path to the item(s) to get changesets for.  Can only be a
-  #   directory.
+  #
+  # @param [String] repository The repository for which to get the changesets
+  #   for.
+  # @param [String] path Path to the item(s) to get changesets for.  Can only
+  #   be a directory.
   # @param [Fixnum] max_return The maximum number of values to return.  If not
   #   set, this is limited by the internal Fisheye server.  If set, the most
   #   recent results are returned.
@@ -223,7 +225,8 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   #   for which to filter the query.
   # @return [Hash<Array,String>] :csids => the Array of changeset IDs;
   #   :max_return => Max values returned.
-  def changesets(repository, path='/', max_return=nil, start_date=nil, end_date=nil)
+  def changesets(repository, path='/', max_return=nil, start_date=nil,
+        end_date=nil)
     build_rest_call('api/rest/changesets',
       :post,
       {
@@ -242,7 +245,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # Sends an EyeQL query to the server for a given repository.  Return types
   #   can differ depending on the 'return-clause' used in the query.  For more
   #   info, see http://confluence.atlassian.com/display/FISHEYE/EyeQL+Reference+Guide.
-  # 
+  #
   # @param [String] repository The repository to run the EyeQL query on.
   # @param [String] query The EyeQL query to run.
   # @return [Object]
@@ -263,7 +266,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
 
   ##
   # Builds and makes the REST call from the arguments given.
-  # 
+  #
   # @param [String] url The API portion of the URL as defined by the API.
   # @param [String] action 'post' or 'get'.
   # @param [Hash] options The REST params to pass to the REST call.
@@ -297,7 +300,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   ##
   # Removes all key/value pairs from Hash that have a nil value and returns
   #   a Hash with keys that have values.
-  # 
+  #
   # @param [Hash] options The Hash to remove nil key/value pairs from.
   def non_nil_options_in options
     non_nil_options = {}
