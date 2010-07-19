@@ -49,7 +49,7 @@ class String
     elsif response_type.eql? 'row'
       return custom_to_array(doc)
     end
-    
+
     message = "Response type unknown: '#{response_type}'"
     return FisheyeCrucibleError.new(message)
   end
@@ -60,7 +60,7 @@ class String
 
   ##
   # Converts a REXML::Document with 1 element of type <string> into a String.
-  # 
+  #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [String] The string from the XML document.
   def string_to_string(xml_doc)
@@ -82,7 +82,7 @@ class String
   ##
   # Converts a REXML::Document with element <boolean> into a true or false
   #   value.
-  # 
+  #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [Boolean] true, false, or nil.
   def boolean_to_true_false(xml_doc)
@@ -92,7 +92,7 @@ class String
   ##
   # Converts a REXML::Document with multiple elements of type <string> into an
   #   Array.
-  # 
+  #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [Array] The list of strings.
   def string_to_array(xml_doc)
@@ -108,7 +108,7 @@ class String
   ##
   # Takes Fisheye/Crucible's <pathinfo> return type and turns it in to
   #   a Hash of Hashes.
-  # 
+  #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [Hash<Hash>] The path info as a Hash.  The Hash contains keys
   #   which are the file/directory names in the path; values for those keys
@@ -134,7 +134,7 @@ class String
   ##
   # Takes Fisheye/Crucible's <revision> return type and turns it in to a single
   #   Hash.
-  # 
+  #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [Hash] The info about the revision.
   def revision_to_hash(xml_doc)
@@ -156,13 +156,13 @@ class String
   ##
   # Takes Fisheye/Crucible's <history> return type and turns it in to an
   #   Array of revisions, which are Hashes.
-  # 
+  #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [Array] The Array of revision Hashes.
   def history_to_array(xml_doc)
     revisions = []
-    
-    revisions_xml = REXML::XPath.match( xml_doc, "//revisions/revision" ) 
+
+    revisions_xml = REXML::XPath.match(xml_doc, "//revisions/revision")
     revisions_xml.each do |revision_xml|
       revision = REXML::Document.new(revision_xml.to_s)
       revisions << revision_to_hash(revision)
@@ -173,7 +173,7 @@ class String
 
   ##
   # Takes Fisheye/Crucible's <changeset> return type and turns it in to a Hash.
-  # 
+  #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [Hash] Hash containting the changeset history information as
   #   defined by the API.
@@ -189,9 +189,9 @@ class String
       end
     end
     details[:log] = xml_doc.root.elements['//log'].text
-    
+
     # Revisions is an Array of Hashes, where each Hash is a key/value pair that
-    #   contains the path and revsion of one of the files/directories that's 
+    #   contains the path and revsion of one of the files/directories that's
     #   part of the changeset.
     details[:revisions] = []
     details[:revisions] << revisionkeys_to_array(xml_doc)
@@ -202,7 +202,7 @@ class String
   ##
   # Takes Fisheye/Crucible's <revisionkey> return type and turns it in to an
   #   Array of Hashes.
-  # 
+  #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [Array<Hash>] The Array of path & rev data.
   def revisionkeys_to_array(xml_doc)
@@ -228,7 +228,7 @@ class String
   def changesets_to_hash(xml_doc)
     changesets = {}
     changesets[:csids] = []
-    
+
     changesets[:max_return] = xml_doc.root.elements['//changesets'].
       attributes['maxReturn']
 
@@ -242,12 +242,12 @@ class String
   ##
   # Takes Fisheye/Crucible's custom <row> return type (from a query) and turns
   #   it in to an Array of Hashes containing the results from the query.
-  # 
+  #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [Array] The result from the query.
   def custom_to_array(xml_doc)
     responses = []
-    
+
     xml_doc.elements.each('//row') do |element|
       response = {}
       element.each do |subs|
