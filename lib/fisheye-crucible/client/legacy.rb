@@ -5,11 +5,11 @@ require 'rexml/document'
 
 ##
 # This class provides access to the Fisheye/Crucible REST API that was
-#   used before version 2.0.  More info here:
-#   http://confluence.atlassian.com/display/FECRUDEV/FishEye+Legacy+Remote+API
+# used before version 2.0.  More info here:
+# http://confluence.atlassian.com/display/FECRUDEV/FishEye+Legacy+Remote+API
 #
 # All methods are named in Ruby style, however aliases are provided that are
-#   named after the Fisheye/Crucible function name (if different).
+# named after the Fisheye/Crucible function name (if different).
 class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
 
   def initialize(server)
@@ -18,7 +18,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
 
   ##
   # Logs in with provided credentials and returns a token that can be used for
-  #   all other calls.
+  # all other calls.
   #
   # @param [String] username The user to login with.
   # @param [String] password The password of the user to login with.
@@ -104,7 +104,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
 
   ##
   # Gets details about a specific file/directory revision from the given
-  #   repository.
+  # repository.
   #
   # @param [String] repository The repository in which the file resides.
   # @param [String] path The path, relative to the repository, in which the
@@ -171,7 +171,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
 
   ##
   # Gets the history for a file/directory, which is a list of revisions and
-  #   their associated info.
+  # their associated info.
   #
   # @param [String] repository The repository for which to get the history
   #   info about.
@@ -243,8 +243,8 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
 
   ##
   # Sends an EyeQL query to the server for a given repository.  Return types
-  #   can differ depending on the 'return-clause' used in the query.  For more
-  #   info, see http://confluence.atlassian.com/display/FISHEYE/EyeQL+Reference+Guide.
+  # can differ depending on the 'return-clause' used in the query.  For more
+  # info, see http://confluence.atlassian.com/display/FISHEYE/EyeQL+Reference+Guide.
   #
   # @param [String] repository The repository to run the EyeQL query on.
   # @param [String] query The EyeQL query to run.
@@ -299,7 +299,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
 
   ##
   # Removes all key/value pairs from Hash that have a nil value and returns
-  #   a Hash with keys that have values.
+  # a Hash with keys that have values.
   #
   # @param [Hash] options The Hash to remove nil key/value pairs from.
   def non_nil_options_in options
