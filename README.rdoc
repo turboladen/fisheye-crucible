@@ -49,6 +49,10 @@ A quick example:
 
 * (sudo) gem install fisheye-crucible
 
+== LINKS:
+
+* Docs: http://rdoc.info/projects/turboladen/fisheye-crucible
+
 == LICENSE:
 
 (The MIT License)
