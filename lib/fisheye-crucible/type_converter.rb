@@ -1,7 +1,25 @@
 require 'rexml/document'
 require 'fisheye-crucible'
 
+# By adding this method to String, the #to_ruby method can be called directly
+# on the return data from RestClient.  This, effectively, accomplishes turning
+# a String of XML into the Ruby data types that make sense for the return types
+# that Atlassian defined.
 class String
+
+  # Takes a String of XML then converts in to a correlating Ruby data type.
+  #   Aside from the documentation for each private method below, here is the
+  #   conversion table:
+  # | Fisheye/Crucible Type  | Ruby Type               |
+  # | string                 | String                  |
+  # | boolean                | TrueClass, FalseClass   |
+  # | pathinfo               | Hash with child Hashes  |
+  # | revision               | Hash                    |
+  # | history                | Array of revisions      |
+  # | changeset              | Hash                    |
+  # | changesets             | Hash of changesets      |
+  # | revisionkey            | Array with child Hashes |
+  # | row                    | Array                   |
   def to_ruby
     doc = REXML::Document.new self
 
@@ -158,7 +176,7 @@ class String
   #   Array of revisions, which are Hashes.
   #
   # @param [REXML::Document] xml_doc The XML document to convert.
-  # @return [Array] The Array of revision Hashes.
+  # @return [Array<Hash>] The Array of revision Hashes.
   def history_to_array(xml_doc)
     revisions = []
 
