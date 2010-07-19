@@ -8,18 +8,18 @@ require 'fisheye-crucible'
 class String
 
   # Takes a String of XML then converts in to a correlating Ruby data type.
-  #   Aside from the documentation for each private method below, here is the
-  #   conversion table:
-  # | Fisheye/Crucible Type  | Ruby Type               |
-  # | string                 | String                  |
-  # | boolean                | TrueClass, FalseClass   |
-  # | pathinfo               | Hash with child Hashes  |
-  # | revision               | Hash                    |
-  # | history                | Array of revisions      |
-  # | changeset              | Hash                    |
-  # | changesets             | Hash of changesets      |
-  # | revisionkey            | Array with child Hashes |
-  # | row                    | Array                   |
+  # Aside from the documentation for each private method below, here is the
+  # conversion table:
+  #   | Fisheye/Crucible Type  | Ruby Type               |
+  #   | string                 | String                  |
+  #   | boolean                | TrueClass, FalseClass   |
+  #   | pathinfo               | Hash with child Hashes  |
+  #   | revision               | Hash                    |
+  #   | history                | Array of revisions      |
+  #   | changeset              | Hash                    |
+  #   | changesets             | Hash of changesets      |
+  #   | revisionkey            | Array with child Hashes |
+  #   | row                    | Array                   |
   def to_ruby
     doc = REXML::Document.new self
 
