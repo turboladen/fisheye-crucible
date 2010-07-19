@@ -200,10 +200,11 @@ class String
 
     xml_doc.root.elements['//changeset'].attributes.each do |attribute|
       # Convert the value to an Int if the string is just a number
-      if attribute[1] =~ /^\d+$/
-        details[attribute.first.to_sym] = attribute[1].to_i
+      int_attribute = attribute[1]
+      if int_attribute =~ /^\d+$/
+        details[attribute.first.to_sym] = int_attribute.to_i
       else
-        details[attribute.first.to_sym] = attribute[1]
+        details[attribute.first.to_sym] = int_attribute
       end
     end
     details[:log] = xml_doc.root.elements['//log'].text
