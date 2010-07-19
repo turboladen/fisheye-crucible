@@ -48,10 +48,10 @@ class String
       return revisionkeys_to_array(doc)
     elsif response_type.eql? 'row'
       return custom_to_array(doc)
-    else
-      message = "Response type unknown: '#{response_type}'"
-      return FisheyeCrucibleError.new(message)
     end
+    
+    message = "Response type unknown: '#{response_type}'"
+    return FisheyeCrucibleError.new(message)
   end
 
   ##
