@@ -3,8 +3,8 @@ require 'fisheye-crucible'
 require 'rest-client'
 
 # This is the parent class for accessing Fisheye/Crucible.  This will change
-#   quite a bit once work on the current Fisheye/Crucible gets started.  For
-#   now, look at the docs for FisheyeCrucible::Client::Legacy to get started.
+# quite a bit once work on the current Fisheye/Crucible gets started.  For
+# now, look at the docs for FisheyeCrucible::Client::Legacy to get started.
 class FisheyeCrucible::Client
 
   # @return [Boolean] Turn debug on or off
