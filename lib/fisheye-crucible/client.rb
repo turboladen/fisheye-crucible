@@ -12,7 +12,7 @@ class FisheyeCrucible::Client
 
   ##
   # Sets up a Rest object to interact with the server(s).
-  # 
+  #
   # @param [String] server The base URL of the server to connect to.
   def initialize(server)
     @server = server
@@ -23,7 +23,7 @@ class FisheyeCrucible::Client
 
   ##
   # Print out string if debug is turned on.
-  # 
+  #
   # @param [String] string The debug string to print out.
   def debug(string)
     if @do_debug
