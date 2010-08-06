@@ -23,6 +23,8 @@ class String
   def to_ruby
     doc = REXML::Document.new self
 
+puts doc
+
     type = doc.root.name
     doc_text = doc.root.text
 
@@ -66,6 +68,8 @@ class String
       return revisionkeys_to_array(doc)
     elsif response_type.eql? 'row'
       return custom_to_array(doc)
+    elsif response_type.eql? ''
+      return ''
     end
 
     message = "Response type unknown: '#{response_type}'"
