@@ -23,8 +23,6 @@ class String
   def to_ruby
     doc = REXML::Document.new self
 
-puts doc
-
     type = doc.root.name
     doc_text = doc.root.text
 
