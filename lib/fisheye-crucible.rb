@@ -5,6 +5,6 @@ $:.unshift(File.dirname(__FILE__)) unless
 require 'fisheye_crucible_exception'
 
 module FisheyeCrucible
-  VERSION = '0.0.1'
+  VERSION = '0.0.2'
   WWW = 'http://github.com/turboladen/fisheye-crucible'
 end
