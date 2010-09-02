@@ -51,7 +51,7 @@ A quick example:
 
 == LINKS:
 
-* Docs: http://rdoc.info/projects/turboladen/fisheye-crucible
+* Docs: http://rubydoc.info/github/turboladen/fisheye-crucible/master/frames
 
 == LICENSE:
 
