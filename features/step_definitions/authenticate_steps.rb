@@ -5,7 +5,7 @@ Given /^a valid user, "(\w+)" and password "(.+)"$/ do |user, password|
   @password = password
 end
 
-When /^I login with that user\'s credentials$/ do
+When /^I login with that user's credentials$/ do
   @login = lambda { @fc.login(@user, @password) }
   @login.should_not be_nil
 end

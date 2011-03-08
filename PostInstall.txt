@@ -1,6 +1,0 @@
-
-Thanks for installing fisheye-crucible, I hope you get some good use out of it.
-
-For more information on fisheye-crucible, see http://github.com/turboladen/fisheye-crucible
-
-

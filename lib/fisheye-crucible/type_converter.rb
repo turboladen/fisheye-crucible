@@ -71,7 +71,8 @@ class String
     end
 
     message = "Response type unknown: '#{response_type}'"
-    return FisheyeCrucibleError.new(message)
+
+    FisheyeCrucibleError.new(message)
   end
 
   ##
@@ -96,7 +97,8 @@ class String
   def string_to_true_false(string)
     return true if string.eql? 'true'
     return false if string.eql? 'false'
-    return string
+
+    string
   end
 
   ##

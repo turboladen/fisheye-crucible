@@ -103,7 +103,7 @@ Then /help options "(.*)" and "(.*)" are displayed/ do |opt1, opt2|
   actual_output.should match(/#{opt2}/)
 end
 
-Then /^I should see "([^\"]*)"$/ do |text|
+Then /^I should see "([^"]*)"$/ do |text|
   actual_output = File.read(@stdout)
   actual_output.should contain(text)
 end

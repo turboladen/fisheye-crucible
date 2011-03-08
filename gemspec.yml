@@ -1,0 +1,22 @@
+name: fisheye-crucible
+summary:
+  REST wrapper around Atlassian's Fisheye/Crucible's API
+description:
+  This gem is a wrapper around the REST API for Atlassian's {Fisheye}[http://www.atlassian.com/software/fisheye/]
+  and {Crucible}[http://www.atlassian.com/software/crucible/].  It currently only
+  provides access to their {legacy API}[http://confluence.atlassian.com/display/FECRUDEV/FishEye+Legacy+Remote+API];
+  wrapping of the current API is in the works.
+
+license: MIT
+authors: sloveless
+email: steve.loveless@gmail.com
+homepage: http://rubygems.org/gems/fisheye-crucible
+has_yard: true
+
+dependencies:
+  rest-client: ~> 1.6.1
+
+development_dependencies:
+  bundler: ~> 1.0.0
+  yard: ~> 0.6.0
+  ore-core: ~> 0.1.0
