@@ -40,7 +40,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   def logout
     unless @token
       error_message = "Can't log out--it seems you're not logged in."
-      raise FisheyeCrucibleError, error_message
+      raise FisheyeCrucible::Error, error_message
     end
 
     result = build_rest_call('api/rest/logout', :post, { :auth => @token })
@@ -290,7 +290,7 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     response_xml = eval(rest_call)
     response = response_xml.to_ruby
 
-    if response.class == FisheyeCrucibleError
+    if response.class == FisheyeCrucible::Error
       raise response
     end
 
@@ -310,6 +310,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
 
     non_nil_options
   end
-rescue FisheyeCrucibleError => e
+rescue FisheyeCrucible::Error => e
   puts e.message
 end

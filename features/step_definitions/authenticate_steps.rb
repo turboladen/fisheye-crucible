@@ -17,7 +17,7 @@ Then /^I receive a token back from the server$/ do
 end
 
 Then /^I receive an authentication error$/ do
-  @login.should raise_error(FisheyeCrucibleError)
+  @login.should raise_error(FisheyeCrucible::Error)
 end
 
 When /^I logout$/ do
@@ -31,5 +31,5 @@ Then /^I receive confirmation that I have logged out$/ do
 end
 
 Then /^I receive an error telling me I'm not logged in$/ do
-  @logout.should raise_error(FisheyeCrucibleError)
+  @logout.should raise_error(FisheyeCrucible::Error)
 end

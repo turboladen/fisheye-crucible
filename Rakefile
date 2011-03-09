@@ -24,7 +24,7 @@ Dir['tasks/**/*.rake'].each { |t| load t }
 require 'yard'
 YARD::Rake::YardocTask.new
 
-require 'ore/specification'
+#require 'ore/specification'
 require 'jeweler'
 Jeweler::Tasks.new(Ore::Specification.new)
 

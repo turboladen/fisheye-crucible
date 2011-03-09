@@ -61,13 +61,13 @@ Feature: Client to the legacy API
     | fisheyeVersion    | 'test'                        | ArgumentError   |
     | crucibleVersion   | 'test'                        | ArgumentError   |
     | listRepositories  | 'test'                        | ArgumentError   |
-    | listPaths         | 'blahblahblah'                | FisheyeCrucibleError |
-    | listPaths         | 'antlr','blahblahblah'        | FisheyeCrucibleError |
-    | getRevision       | 'blahblahblah','BUILD.txt',5847  | FisheyeCrucibleError |
-    | getRevision       | 'antlr','blahblahblah',5847   | FisheyeCrucibleError |
-    | getRevision       | 'antlr','BUILD.txt',9999999   | FisheyeCrucibleError |
+    | listPaths         | 'blahblahblah'                | FisheyeCrucible::Error |
+    | listPaths         | 'antlr','blahblahblah'        | FisheyeCrucible::Error |
+    | getRevision       | 'blahblahblah','BUILD.txt',5847  | FisheyeCrucible::Error |
+    | getRevision       | 'antlr','blahblahblah',5847   | FisheyeCrucible::Error |
+    | getRevision       | 'antlr','BUILD.txt',9999999   | FisheyeCrucible::Error |
     | getRevision       | 'antlr','BUILD.txt','blahblahblah'   | RestClient::InternalServerError |
-    | pathHistory       | 'blahblahblah','BUILD.txt'    | FisheyeCrucibleError |
-    | pathHistory       | 'antlr','blahblahblah'        | FisheyeCrucibleError |
-    | pathHistory       | 'antlr',123456789             | FisheyeCrucibleError |
+    | pathHistory       | 'blahblahblah','BUILD.txt'    | FisheyeCrucible::Error |
+    | pathHistory       | 'antlr','blahblahblah'        | FisheyeCrucible::Error |
+    | pathHistory       | 'antlr',123456789             | FisheyeCrucible::Error |
 
