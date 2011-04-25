@@ -3,7 +3,6 @@ require 'fisheye-crucible/client'
 require 'fisheye-crucible/type_converter'
 require 'rexml/document'
 
-##
 # This class provides access to the Fisheye/Crucible REST API that was
 # used before version 2.0.  More info here:
 # http://confluence.atlassian.com/display/FECRUDEV/FishEye+Legacy+Remote+API
@@ -11,12 +10,10 @@ require 'rexml/document'
 # All methods are named in Ruby style, however aliases are provided that are
 # named after the Fisheye/Crucible function name (if different).
 class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
-
   def initialize(server)
     super(server)
   end
 
-  ##
   # Logs in with provided credentials and returns a token that can be used for
   # all other calls.
   #
@@ -33,7 +30,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     )
   end
 
-  ##
   # Logs out of Fisheye/Crucible.
   #
   # @return [Boolean] Returns true if logout was successful.
@@ -50,17 +46,14 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     result
   end
 
-  ##
   # Gets the version of Fisheye.
   #
   # @return [String] The version of Fisheye.
-  # @alias fisheyeVersion
   def fisheye_version
     build_rest_call('api/rest/fisheyeVersion', :get)
   end
   alias_method :fisheyeVersion, :fisheye_version
 
-  ##
   # Gets the version of Crucible.
   #
   # @return [String] The version of Crucible.
@@ -69,7 +62,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   end
   alias_method :crucibleVersion, :crucible_version
 
-  ##
   # Gets the list of repositories to an array.
   #
   # @return [Array] The list of repositories.
@@ -81,7 +73,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   end
   alias_method :listRepositories, :repositories
 
-  ##
   # Gets the file/dir listing from a repository.
   #
   # @param [String] repository The repository to get the listing for.
@@ -102,7 +93,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   end
   alias_method :listPaths, :list_paths_from
 
-  ##
   # Gets details about a specific file/directory revision from the given
   # repository.
   #
@@ -125,7 +115,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   end
   alias_method :getRevision, :revision
 
-  ##
   # Gets tags associated with a file/directory revision.
   #
   # @param [String] repository The repository in which the file resides.
@@ -169,7 +158,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   end
   alias_method :listTagsForRevision, :tags
 
-  ##
   # Gets the history for a file/directory, which is a list of revisions and
   # their associated info.
   #
@@ -190,7 +178,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   end
   alias :pathHistory :path_history
 
-  ##
   # Gets information about a changeset.
   #
   # @param [String] repository The repository for which to get the changeset
@@ -209,7 +196,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   end
   alias_method :getChangeset, :changeset
 
-  ##
   # Gets all changeset IDs (csids) that match the parameters given.
   #
   # @param [String] repository The repository for which to get the changesets
@@ -241,7 +227,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   end
   alias_method :listChangesets, :changesets
 
-  ##
   # Sends an EyeQL query to the server for a given repository.  Return types
   # can differ depending on the 'return-clause' used in the query.  For more
   # info, see http://confluence.atlassian.com/display/FISHEYE/EyeQL+Reference+Guide.
@@ -264,7 +249,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
   # Privates
   private
 
-  ##
   # Builds and makes the REST call from the arguments given.
   #
   # @param [String] url The API portion of the URL as defined by the API.
@@ -297,7 +281,6 @@ class FisheyeCrucible::Client::Legacy < FisheyeCrucible::Client
     response
   end
 
-  ##
   # Removes all key/value pairs from Hash that have a nil value and returns
   # a Hash with keys that have values.
   #

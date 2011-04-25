@@ -10,8 +10,7 @@ class FisheyeCrucible::Client
   # @return [Boolean] Turn debug on or off
   attr_accessor :do_debug
 
-  ##
-  # Sets up a Rest object to interact with the server(s).
+  # Sets up a RestClient object to interact with the server(s).
   #
   # @param [String] server The base URL of the server to connect to.
   def initialize(server)
@@ -21,7 +20,6 @@ class FisheyeCrucible::Client
     @do_debug = false
   end
 
-  ##
   # Print out string if debug is turned on.
   #
   # @param [String] string The debug string to print out.
