@@ -131,7 +131,6 @@ class String
   #   which are the file/directory names in the path; values for those keys
   #   are Hashes which contain the properties of that file/directory.
   def pathinfo_to_hash(xml_doc)
-    path_name = ''
     path_names = {}
 
     xml_doc.root.each_element do |element|
