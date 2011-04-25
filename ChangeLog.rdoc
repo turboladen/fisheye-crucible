@@ -1,5 +1,11 @@
-===
+=== 0.0.3 2011-04-24
+
 * Added `gem test` compatibility
+* Converted from hoe to ore & jeweler for gem tasks
+
+=== 0.0.2 2010-08-05
+
+* [gh-2] Fixed bug where empty responses were causing raises.
 
 === 0.0.1 2010-07-15
 
