@@ -79,7 +79,6 @@ class String
   # PRIVATES!
   private
 
-  ##
   # Converts a REXML::Document with 1 element of type <string> into a String.
   #
   # @param [REXML::Document] xml_doc The XML document to convert.
@@ -88,9 +87,8 @@ class String
     xml_doc.root.elements[1].text
   end
 
-  ##
   # Converts a String to its related Boolean type.  If the string doesn't
-  #   contain such a type, nil is returned.
+  # contain such a type, nil is returned.
   #
   # @param [String] string The String to convert.
   # @return [Boolean,String] true, false, or the original string.
@@ -101,9 +99,8 @@ class String
     string
   end
 
-  ##
   # Converts a REXML::Document with element <boolean> into a true or false
-  #   value.
+  # value.
   #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [Boolean] true, false, or nil.
@@ -111,9 +108,8 @@ class String
     string_to_true_false(xml_doc.root.elements[1].text)
   end
 
-  ##
   # Converts a REXML::Document with multiple elements of type <string> into an
-  #   Array.
+  # Array.
   #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [Array] The list of strings.
@@ -127,9 +123,8 @@ class String
     responses
   end
 
-  ##
   # Takes Fisheye/Crucible's <pathinfo> return type and turns it in to
-  #   a Hash of Hashes.
+  # a Hash of Hashes.
   #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [Hash<Hash>] The path info as a Hash.  The Hash contains keys
@@ -153,9 +148,8 @@ class String
     path_names
   end
 
-  ##
   # Takes Fisheye/Crucible's <revision> return type and turns it in to a single
-  #   Hash.
+  # Hash.
   #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [Hash] The info about the revision.
@@ -175,9 +169,8 @@ class String
     details
   end
 
-  ##
   # Takes Fisheye/Crucible's <history> return type and turns it in to an
-  #   Array of revisions, which are Hashes.
+  # Array of revisions, which are Hashes.
   #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [Array<Hash>] The Array of revision Hashes.
@@ -193,7 +186,6 @@ class String
     revisions
   end
 
-  ##
   # Takes Fisheye/Crucible's <changeset> return type and turns it in to a Hash.
   #
   # @param [REXML::Document] xml_doc The XML document to convert.
@@ -222,9 +214,8 @@ class String
     details
   end
 
-  ##
   # Takes Fisheye/Crucible's <revisionkey> return type and turns it in to an
-  #   Array of Hashes.
+  # Array of Hashes.
   #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [Array<Hash>] The Array of path & rev data.
@@ -242,9 +233,8 @@ class String
     revisionkeys
   end
 
-  ##
   # Takes Fisheye/Crucible's <changesets> return type and turns it in to a
-  #   Hash.
+  # Hash.
   #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [Hash] Contains the changeset IDs as defined by the query.
@@ -262,9 +252,8 @@ class String
     changesets
   end
 
-  ##
   # Takes Fisheye/Crucible's custom <row> return type (from a query) and turns
-  #   it in to an Array of Hashes containing the results from the query.
+  # it in to an Array of Hashes containing the results from the query.
   #
   # @param [REXML::Document] xml_doc The XML document to convert.
   # @return [Array] The result from the query.
